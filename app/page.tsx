@@ -59,7 +59,7 @@ export default function Home() {
           </h1>
           <p className="hero-sub">
             {VARIANT === 'A'
-              ? 'MAGfield therapy for golfers who want to play at their best — no pills, no physio appointments.'
+              ? 'DR MAGfield therapy for golfers who want to play at their best — no pills, no physio appointments.'
               : VARIANT === 'B'
               ? 'Heat + Magnetic Vortex + Vibration — developed by Professor Wang Shijie. Not PEMF.'
               : 'Members of Kelab Rahman Putra Malaysia recover faster and play pain-free.'
@@ -178,7 +178,7 @@ export default function Home() {
             { title: 'Improved Swing Flexibility', desc: 'Loosened hip rotators + relaxed lower back = smoother swing arc.' },
             { title: 'Faster Tournament Recovery', desc: 'Post-tournament sessions flush lactic acid — play again sooner at peak.' },
             { title: 'Non-Invasive, No Downtime', desc: 'Lie on the bed fully clothed. No gels, no needles. Back to your day immediately.' },
-            { title: 'Better Sleep After', desc: 'MAGfield promotes parasympathetic response — deeper, more restorative sleep.' },
+            { title: 'Better Sleep After', desc: 'DR MAGfield promotes parasympathetic response — deeper, more restorative sleep.' },
             { title: 'Chronic Pain Protocol', desc: 'Regular sessions show cumulative benefits for herniated discs, rotator cuff, hip osteoarthritis.' },
           ].map((b) => (
             <div key={b.title} className="benefit-card">
