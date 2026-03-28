@@ -1,0 +1,26 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(next *)",
+      "Bash(npm run build)",
+      "Bash(npm run dev)",
+      "Bash(npm run lint)",
+      "Bash(git push)",
+      "Bash(git pull)"
+    ]
+  },
+  "autoMode": {
+    "environment": [
+      "DR MAGfield PWA — mobile-first progressive web app",
+      "Trusted: GitHub push to longevityvalleykeith/dr-magfield-pwa"
+    ],
+    "allow": [
+      "Safe to run next build, next dev, and next lint",
+      "Safe to run evaluation and self-assessment scripts",
+      "Safe to push to github.com/longevityvalleykeith/dr-magfield-pwa"
+    ],
+    "soft_deny": [
+      "Ask before next build --force"
+    ]
+  }
+}
