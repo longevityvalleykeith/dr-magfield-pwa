@@ -1,31 +1,22 @@
 import Image from 'next/image'
-import { evaluateVariant, DEFAULT_SIGNALS, type SignalScores } from '../lib/evaluation'
+import {
+  MessageCircle, Phone, Send, MapPin, Clock,
+  Flag, Activity, Heart, Timer, Check, X,
+  ChevronRight, QrCode
+} from 'lucide-react'
+import { useState, useEffect } from 'react'
+import QRCode from 'qrcode'
 
 export default function Home() {
-  // ─── CONVERSION VARIANT CONFIG ───────────────────────────────────────
-  // VARY THIS FLAG to test different mobile-first designs
-  // Variant A: Pain-first hero (emotional entry)
-  // Variant B: Tech-first hero (credibility entry)
-  // Variant C: Social-proof first hero (trust entry)
-  const VARIANT = 'A' as 'A' | 'B' | 'C'
+  const [telegramQr, setTelegramQr] = useState<string | null>(null)
 
-  // ─── EVALUATION (Self-Evaluation Rubric) ─────────────────────────────
-  // Scores based on mobile-first UX heuristics
-  const scores: Partial<SignalScores> = {
-    aboveTheFoldClarity: VARIANT === 'A' ? 9 : VARIANT === 'B' ? 7 : 6,
-    ctaVisibility:       VARIANT === 'A' ? 9 : VARIANT === 'B' ? 8 : 8,
-    scrollMotivation:    VARIANT === 'A' ? 8 : VARIANT === 'B' ? 9 : 7,
-    loadSpeedPerception: 8,
-    trustCredentials:    VARIANT === 'A' ? 7 : VARIANT === 'B' ? 8 : 9,
-    painSolutionMatch:   VARIANT === 'A' ? 9 : VARIANT === 'B' ? 6 : 5,
-    technologyDifferentiation: VARIANT === 'A' ? 7 : VARIANT === 'B' ? 9 : 6,
-    bookingFriction:      8,  // WhatsApp + phone — both above fold
-    visualHierarchy:     8,
-    emotionalResonance:   VARIANT === 'A' ? 9 : VARIANT === 'B' ? 6 : 7,
-  }
-
-  const result = evaluateVariant(`DRMAG-PWA-V${VARIANT}`, scores)
-  console.log('[EVAL]', JSON.stringify(result))
+  useEffect(() => {
+    QRCode.toDataURL('https://t.me/DrMAGfield_Bot?start=krpm', {
+      width: 180,
+      margin: 2,
+      color: { dark: '#2D3748', light: '#FFFDF9' },
+    }).then(setTelegramQr).catch(() => {})
+  }, [])
 
   return (
     <div className="pwa-container">
@@ -50,27 +41,17 @@ export default function Home() {
             Malaysia&apos;s First Golf Club Bio-Energetic Therapy Lounge
           </div>
           <h1 className="hero-title">
-            {VARIANT === 'A'
-              ? <>Turn Pain<br /><span className="gold">Into Pure Performance</span></>
-              : VARIANT === 'B'
-              ? <>3-in-1 Rotational<br /><span className="gold">Magnetic Therapy</span></>
-              : <>KRPM&#8217;s Preferred<br /><span className="gold">Recovery Partner</span></>
-            }
+            <>Turn Pain<br /><span className="gold">Into Pure Performance</span></>
           </h1>
           <p className="hero-sub">
-            {VARIANT === 'A'
-              ? 'DR MAGfield therapy for golfers who want to play at their best — no pills, no physio appointments.'
-              : VARIANT === 'B'
-              ? 'Heat + Magnetic Vortex + Vibration — developed by Professor Wang Shijie. Not PEMF.'
-              : 'Members of Kelab Rahman Putra Malaysia recover faster and play pain-free.'
-            }
+            DR MAGfield therapy for golfers who want to play at their best — no pills, no physio appointments.
           </p>
           <div className="hero-actions">
             <a href="#book" className="btn-primary">
               Book Your Session &#8594;
             </a>
             <a href="https://wa.me/60123770011" target="_blank" rel="noopener" className="btn-whatsapp">
-              &#128172; WhatsApp Arie
+              <MessageCircle size={18} strokeWidth={2} /> WhatsApp Arie
             </a>
           </div>
           <p className="hero-contact">+6012-377 0011 &#183; Kelab Rahman Putra Malaysia (KRPM)</p>
@@ -82,15 +63,15 @@ export default function Home() {
         <span className="section-label">For Golfers Who Want to Play at Their Best</span>
         <div className="pain-grid">
           {[
-            { icon: '🏌️', title: 'Swing Pain', desc: 'Lower back, elbow, shoulder tension killing your game' },
-            { icon: '😤', title: 'Slow Recovery', desc: 'Muscles stay tight overnight' },
-            { icon: '💊', title: 'Pills Don\'t Fix It', desc: 'Painkillers mask the problem, never fix it' },
-            { icon: '⏳', title: 'Time Poor', desc: 'No time for physio during tournament season' },
-          ].map((item) => (
-            <div key={item.title} className="pain-card">
-              <div className="pain-icon">{item.icon}</div>
-              <h3>{item.title}</h3>
-              <p>{item.desc}</p>
+            { Icon: Flag, title: 'Swing Pain', desc: 'Lower back, elbow, shoulder tension killing your game' },
+            { Icon: Activity, title: 'Slow Recovery', desc: 'Muscles stay tight overnight' },
+            { Icon: Heart, title: 'Pills Don\'t Fix It', desc: 'Painkillers mask the problem, never fix it' },
+            { Icon: Clock, title: 'Time Poor', desc: 'No time for physio during tournament season' },
+          ].map(({ Icon, title, desc }) => (
+            <div key={title} className="pain-card">
+              <div className="pain-icon"><Icon size={28} strokeWidth={1.5} /></div>
+              <h3>{title}</h3>
+              <p>{desc}</p>
             </div>
           ))}
         </div>
@@ -136,7 +117,7 @@ export default function Home() {
             {[
               ['Format', 'Full-body therapy bed — no leads', 'Pads/coils placed on body'],
               ['Modality', '3-in-1: magnetic + heat + vibration', 'Single-modality'],
-              ['Heat', '&#10003; Integrated', '&#10007; External source needed'],
+              ['Heat', '✓ Integrated', '✗ External source needed'],
               ['Best for', 'Athletes, golfers, performance', 'Clinical rehabilitation'],
               ['Treatment', '30-45 min per session', '15-30 min per session'],
             ].map(([factor, mag, pemf]) => (
@@ -182,7 +163,7 @@ export default function Home() {
             { title: 'Chronic Pain Protocol', desc: 'Regular sessions show cumulative benefits for herniated discs, rotator cuff, hip osteoarthritis.' },
           ].map((b) => (
             <div key={b.title} className="benefit-card">
-              <div className="benefit-check">&#10003;</div>
+              <div className="benefit-check"><Check size={16} strokeWidth={2.5} /></div>
               <div>
                 <h4>{b.title}</h4>
                 <p>{b.desc}</p>
@@ -198,15 +179,15 @@ export default function Home() {
         <h2 className="section-heading">KRPM Experience Lounge</h2>
         <div className="loc-card">
           {[
-            { icon: '📍', strong: 'Kelab Rahman Putra Malaysia (KRPM)', div: 'Sungai Buloh, Selangor, Malaysia' },
-            { icon: '📞', strong: '+6012-377 0011', div: 'Arie Ong (Experience Coordinator)' },
-            { icon: '🕐', strong: 'By Appointment', div: 'Members & Guests of KRPM' },
-          ].map((item) => (
-            <div key={item.strong} className="loc-item">
-              <span className="loc-icon">{item.icon}</span>
+            { Icon: MapPin, strong: 'Kelab Rahman Putra Malaysia (KRPM)', div: 'Sungai Buloh, Selangon, Malaysia' },
+            { Icon: Phone, strong: '+6012-377 0011', div: 'Arie Ong (Experience Coordinator)' },
+            { Icon: Clock, strong: 'By Appointment', div: 'Members & Guests of KRPM' },
+          ].map(({ Icon, strong, div }) => (
+            <div key={strong} className="loc-item">
+              <span className="loc-icon"><Icon size={20} strokeWidth={1.5} /></span>
               <div>
-                <strong>{item.strong}</strong>
-                <div>{item.div}</div>
+                <strong>{strong}</strong>
+                <div>{div}</div>
               </div>
             </div>
           ))}
@@ -223,14 +204,14 @@ export default function Home() {
           <p>Experience Lounge at Kelab Rahman Putra Malaysia</p>
           <div className="book-options">
             <a href="https://wa.me/60123770011" target="_blank" rel="noopener" className="book-option whatsapp">
-              <span className="book-icon">&#128172;</span>
+              <span className="book-icon"><MessageCircle size={18} strokeWidth={2} /></span>
               <div>
                 <strong>WhatsApp Arie</strong>
                 <span>+6012-377 0011</span>
               </div>
             </a>
             <a href="tel:+60123770011" className="book-option phone">
-              <span className="book-icon">&#128222;</span>
+              <span className="book-icon"><Phone size={18} strokeWidth={2} /></span>
               <div>
                 <strong>Call Directly</strong>
                 <span>+6012-377 0011</span>
@@ -253,26 +234,30 @@ export default function Home() {
         </p>
         <div className="scr-steps">
           {[
-            { icon: '📱', step: 'SCAN', desc: 'Scan the QR code with your phone camera to open @DrMAGfield_Bot' },
-            { icon: '💬', step: 'CHAT', desc: 'Tell the agent your golf pain points — lower back, elbow, or recovery pace' },
-            { icon: '🏌️', step: 'RECOVER', desc: 'Get a personalised protocol and book your KRPM session with Arie instantly' },
-          ].map((s) => (
-            <div key={s.step} className="scr-step">
-              <div className="scr-icon">{s.icon}</div>
+            { Icon: QrCode, step: 'SCAN', desc: 'Scan the QR code with your phone camera to open @DrMAGfield_Bot' },
+            { Icon: MessageCircle, step: 'CHAT', desc: 'Tell the agent your golf pain points — lower back, elbow, or recovery pace' },
+            { Icon: Flag, step: 'RECOVER', desc: 'Get a personalised protocol and book your KRPM session with Arie instantly' },
+          ].map(({ Icon, step, desc }) => (
+            <div key={step} className="scr-step">
+              <div className="scr-icon"><Icon size={26} strokeWidth={1.5} /></div>
               <div>
-                <strong>{s.step}</strong>
-                <p>{s.desc}</p>
+                <strong>{step}</strong>
+                <p>{desc}</p>
               </div>
             </div>
           ))}
         </div>
         <a href="https://t.me/DrMAGfield_Bot" target="_blank" rel="noopener" className="btn-primary">
-          &#128722; Open @DrMAGfield_Bot
+          <Send size={18} strokeWidth={2} /> Open @DrMAGfield_Bot
         </a>
         <div className="qr-card">
-          <div style={{ width: 180, height: 180, background: 'rgba(255,255,255,0.08)', borderRadius: 12, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 12, color: 'rgba(255,255,255,0.4)' }}>
-            [QR Code]<br/>@DrMAGfield_Bot
-          </div>
+          {telegramQr ? (
+            <img src={telegramQr} alt="Telegram QR Code" style={{ width: 180, height: 180, borderRadius: 12, objectFit: 'cover' }} />
+          ) : (
+            <div style={{ width: 180, height: 180, background: 'rgba(255,255,255,0.08)', borderRadius: 12, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 12, color: 'rgba(255,255,255,0.4)' }}>
+              <QrCode size={48} strokeWidth={1} />
+            </div>
+          )}
           <span className="qr-handle">@DrMAGfield_Bot</span>
         </div>
       </section>
@@ -295,7 +280,7 @@ export default function Home() {
       <div className="sticky-booking">
         <a href="#book" className="btn-primary">Book Now</a>
         <a href="https://wa.me/60123770011" target="_blank" rel="noopener" className="btn-whatsapp">
-          &#128172; WhatsApp
+          <MessageCircle size={18} strokeWidth={2} /> WhatsApp
         </a>
       </div>
     </div>
