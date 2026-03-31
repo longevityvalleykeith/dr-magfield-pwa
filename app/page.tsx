@@ -69,11 +69,11 @@ export default function Home() {
             <a href="#book" className="btn-primary">
               Book Your Session &#8594;
             </a>
-            <a href="https://wa.me/60123770011" target="_blank" rel="noopener" className="btn-whatsapp">
+            <a href="https://wa.me/60126595319" target="_blank" rel="noopener" className="btn-whatsapp">
               &#128172; WhatsApp Arie
             </a>
           </div>
-          <p className="hero-contact">+6012-377 0011 &#183; Kelab Rahman Putra Malaysia (KRPM)</p>
+          <p className="hero-contact">+6012-659 5319 &#183; Kelab Rahman Putra Malaysia (KRPM)</p>
         </div>
       </section>
 
@@ -199,7 +199,7 @@ export default function Home() {
         <div className="loc-card">
           {[
             { icon: '📍', strong: 'Kelab Rahman Putra Malaysia (KRPM)', div: 'Sungai Buloh, Selangor, Malaysia' },
-            { icon: '📞', strong: '+6012-377 0011', div: 'Arie Ong (Experience Coordinator)' },
+            { icon: '📞', strong: '+6012-659 5319', div: 'Arie Ong (Experience Coordinator)' },
             { icon: '🕐', strong: 'By Appointment', div: 'Members & Guests of KRPM' },
           ].map((item) => (
             <div key={item.strong} className="loc-item">
@@ -222,18 +222,18 @@ export default function Home() {
           <h2>Book Your Session</h2>
           <p>Experience Lounge at Kelab Rahman Putra Malaysia</p>
           <div className="book-options">
-            <a href="https://wa.me/60123770011" target="_blank" rel="noopener" className="book-option whatsapp">
+            <a href="https://wa.me/60126595319" target="_blank" rel="noopener" className="book-option whatsapp">
               <span className="book-icon">&#128172;</span>
               <div>
                 <strong>WhatsApp Arie</strong>
-                <span>+6012-377 0011</span>
+                <span>+6012-659 5319</span>
               </div>
             </a>
-            <a href="tel:+60123770011" className="book-option phone">
+            <a href="tel:+60126595319" className="book-option phone">
               <span className="book-icon">&#128222;</span>
               <div>
                 <strong>Call Directly</strong>
-                <span>+6012-377 0011</span>
+                <span>+6012-659 5319</span>
               </div>
             </a>
           </div>
@@ -294,7 +294,7 @@ export default function Home() {
       {/* ── STICKY BOOKING BAR ─────────────────────────────── */}
       <div className="sticky-booking">
         <a href="#book" className="btn-primary">Book Now</a>
-        <a href="https://wa.me/60123770011" target="_blank" rel="noopener" className="btn-whatsapp">
+        <a href="https://wa.me/60126595319" target="_blank" rel="noopener" className="btn-whatsapp">
           &#128172; WhatsApp
         </a>
       </div>
