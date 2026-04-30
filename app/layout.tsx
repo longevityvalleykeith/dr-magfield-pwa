@@ -4,7 +4,7 @@ import './globals.css'
 export const metadata: Metadata = {
   title: 'DR MAGfield | Malaysia\'s Golf Club Bio-Energetic Therapy Lounge',
   description: 'Turn Pain into Pure Performance. 3-in-1 MAGfield rotational magnetic therapy at Kelab Rahman Putra Malaysia (KRPM). Book your session with Arie Ong.',
-  keywords: 'DR MAGfield, magnetic therapy, golf recovery, KRPM, Sungai Buloh, Malaysia wellness, bio-energetic therapy, pain management, sports recovery, 旋磁疗法',
+  keywords: 'DR MAGfield, rotational magnetic therapy, bio-energetic therapy, Pulsed Electromagnetic Field, PEMF golf injury recovery, golf injury recovery, KRPM clubhouse therapy lounge, Kelab Rahman Putra Malaysia, Sungai Buloh, Malaysia wellness, Arie Ong, pain management, sports recovery, 旋磁疗法',
   manifest: '/manifest.json',
   appleWebApp: {
     capable: true,

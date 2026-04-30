@@ -91,7 +91,7 @@ export default function Home() {
             Turn <em>Pain</em><br />into Pure Performance
           </h1>
           <p className="hero-sub">
-            3-in-1 rotational magnetic therapy for golfers who want to play at their peak — no pills, no physio appointments.
+            3-in-1 rotational magnetic therapy at the bio-energetic therapy lounge inside the KRPM clubhouse — for golfers recovering from injuries, no pills, no physio appointments.
           </p>
           <div className="hero-actions">
             <a href="#book" className="btn-primary">Book Your Recovery Session</a>
@@ -105,7 +105,7 @@ export default function Home() {
 
       {/* ── PAIN POINTS ─────────────────────────────────────── */}
       <section className="pain-section">
-        <span className="section-label">For Golfers Who Want to Play at Their Best</span>
+        <span className="section-label">Golf Injury Recovery for Players Who Want to Play at Their Best</span>
         <div className="pain-grid">
           {[
             { Icon: Flag, title: 'Swing Pain', desc: 'Lower back, elbow, shoulder tension killing your game' },
@@ -129,7 +129,7 @@ export default function Home() {
           3-in-1 Rotational<br /><span className="gold">Magnetic Therapy</span>
         </h2>
         <p style={{ fontSize: '14px', color: 'rgba(255,255,255,0.55)', lineHeight: '1.75', maxWidth: 380 }}>
-          Developed by Professor Wang Shijie. Not PEMF — rotating magnetic fields deeply penetrate and regenerate tissue at the cellular level.
+          Developed by Professor Wang Shijie. A bio-energetic therapy beyond Pulsed Electromagnetic Field (PEMF) — rotating magnetic fields deeply penetrate and regenerate tissue at the cellular level.
         </p>
         <div className="tech-pillars">
           {[
@@ -282,7 +282,7 @@ export default function Home() {
       <section className="book-section" id="book">
         <div className="book-card">
           <h2>Book Your Session</h2>
-          <p>Experience Lounge at Kelab Rahman Putra Malaysia</p>
+          <p>Bio-Energetic Therapy Lounge at the Kelab Rahman Putra Malaysia (KRPM) Clubhouse</p>
           <div className="book-options">
             <a href={WA_URL} target="_blank" rel="noopener" className="book-option whatsapp">
               <span className="book-icon"><MessageCircle size={22} strokeWidth={1.5} /></span>
