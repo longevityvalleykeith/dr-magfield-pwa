@@ -1,0 +1,383 @@
+# HANDOFF: PWA Audit — ADR-6 / ADR-7 Pre-Rabbit-Cup Resolution
+# ─────────────────────────────────────────────────────────────────────────────
+# Generated   : 2026-05-01 (T-8 days to KRPM Rabbit Cup 2026-05-09)
+# Anchor SHAs : dr-magfield-pwa@9c6e16ca  (main)
+#               expertagentfoundry@37b01309 (main)
+# Lens        : agency-agents/engineering-frontend-developer +
+#               agency-agents/engineering-senior-developer +
+#               agency-agents/marketing-growth-hacker (closest SEO proxy)
+# Author      : Claude Opus 4.7 [adversarial audit pass]
+# Audience    : Claude Code CLI session in expertagentfoundry repo
+# Branch      : claude/audit-pwa-codebase-INxe1
+# ─────────────────────────────────────────────────────────────────────────────
+
+handoff_id: pwa-2026-05-01-001_ADR6_ADR7_PRE_RABBIT_CUP
+handoff_type: adversarial_audit_to_resolution
+status: brainstorm-ready
+
+# ─────────────────────────────────────────────────────────────────────────────
+# §0  PRE-FLIGHT FALSIFICATION (do this first; do not skip)
+# ─────────────────────────────────────────────────────────────────────────────
+# This handoff was written without locating ADR-6 / ADR-7 verbatim. Code search
+# returned 0 matches across all three LV repos. The mapping below is INFERRED
+# from two 2026-04-30 commits whose messages cite the ADRs by slug. Falsify
+# before acting.
+preflight_contracts:
+  PF-1:
+    claim: "ADR-006 = PWA GEO Readiness floor ratchet"
+    evidence: "dr-magfield-pwa@9c6e16ca commit msg: 'Floor ratchet
+              (adr-006-pwa-geo-readiness) follows on next t9b re-export'"
+    falsifier: "git grep -i 'adr-006' in expertagentfoundry; if the ADR
+                resolves to telegram-HITL/partnerships instead, swap labels
+                ADR-6↔ADR-7 throughout this handoff. Gap matrix is unaffected."
+  PF-2:
+    claim: "ADR-007 = Partnerships / Telegram HITL / action-lifecycle"
+    evidence: "expertagentfoundry@16563b45 commit msg: 'ratchet 3 ceilings for
+              ADR-006 telegram HITL + audit alignment ... SSP-3 ADR-006
+              partnerships + hitl_operator_config service refs'"
+    note: "Both commits cite 'ADR-006' — possible same ADR with two layers, or
+           two ADRs sharing a number. Resolve before code mutation."
+  PF-3:
+    claim: "Rabbit Cup 2026-05-09 is the launch anchor"
+    evidence: "expertagentfoundry@a7b2424a commit msg: 'target: KRPM Rabbit
+              Cup 2026-05-09 + 1000s-of-partners scaling'"
+    falsifier: "Confirm date with Keith; if shifted, T-8 sequencing collapses
+                and §3 (LAUNCH-CRITICAL) re-prioritizes vs §4 (STRUCTURAL)."
+
+# ─────────────────────────────────────────────────────────────────────────────
+# §1  GROUND-TRUTH STATE OF THE PWA  (verified, not inferred)
+# ─────────────────────────────────────────────────────────────────────────────
+pwa_state:
+  routes:
+    count: 1
+    list: ["/"]
+  rendering:
+    page.tsx: "'use client' (entire page client-rendered)"
+    layout.tsx: "server, ships metadata + 4 google-fonts families render-blocking"
+  navigation_sitemap:
+    top_nav: ["#book (BOOK NOW)", "hamburger menu (5 anchors)"]
+    bottom_nav:
+      - {label: "Home",      href: "#"}
+      - {label: "Qi Master", href: "#technology"}
+      - {label: "Qi Mini",   href: "wa.me/60126595319",  bug: "label↔target mismatch"}
+      - {label: "KRPM",      href: "#location"}
+      - {label: "Book",      href: "#book"}
+    section_anchors: ["#book", "#technology", "#benefits", "#location", "#agent"]
+  seo_surfaces:
+    json_ld: 0
+    robots_txt: false
+    sitemap_xml: false
+    open_graph: "partial — no images, no siteName, no locale, no url"
+    twitter_card: "missing"
+    hreflang: "missing (lang=en only)"
+    headings:
+      h1: 1
+      h2_per_section: true
+      pemf_table_caption: false   # highest-density entity surface, uncaptioned
+      stats_section_heading: false
+  pwa_surfaces:
+    manifest: present
+    service_worker: false
+    theme_color_consistency: "FAIL — manifest=#1A1A1A vs viewport=#F9F7F2"
+    share_target_api: false
+    push_subscription: false
+  partnership_surfaces:
+    booking_form: false
+    utm_capture: false
+    e164_phone_normalization: false
+    partner_aware_landing: false
+    partner_config_resolution: "hardcoded — BRAND_WHATSAPP='60126595319'"
+    telegram_start_param: "hardcoded — ?start=krpm"
+    hitl_status_loop_back: false
+  asset_pipeline:
+    next_image: "not used — raw <img> with eslint-disable, all hero/product
+                  imgs from lh3.googleusercontent.com"
+    next_config_remote_patterns: ["images.unsplash.com only — Stitch CDN
+                                    NOT whitelisted"]
+
+# ─────────────────────────────────────────────────────────────────────────────
+# §2  GAP MATRIX  (severity-ranked)
+# ─────────────────────────────────────────────────────────────────────────────
+adr6_geo_readiness_gaps:
+  G-1:
+    severity: BLOCKER
+    surface: "app/page.tsx:1"
+    finding: "'use client' nullifies indexing for non-JS-executing crawlers
+              (GPTBot, ClaudeBot, PerplexityBot)."
+    fix_principle: "Server-render the indexable shell; isolate state into
+                    client islands (<MobileMenu/>, <TelegramQR/>)."
+    falsifiable_test: "curl -A 'GPTBot' https://… | grep -c 'bio-energetic
+                       therapy' must equal copy occurrences."
+  G-2:
+    severity: BLOCKER
+    surface: "app/layout.tsx (metadata)"
+    finding: "Zero JSON-LD. No LocalBusiness/MedicalProcedure/Person/Place/
+              Product/FAQPage. Highest single GEO ROI."
+    fix_principle: "Inline <script type='application/ld+json'> in layout via
+                    Next 14 metadata. Min set: LocalBusiness + MedicalProcedure
+                    + Person(Arie) + FAQPage."
+    falsifiable_test: "Google Rich Results Test passes for all 4 types."
+  G-3:
+    severity: BLOCKER
+    finding: "No robots.txt, no sitemap.xml."
+    fix_principle: "app/robots.ts + app/sitemap.ts (Next 14 file conventions)."
+    falsifiable_test: "GET /robots.txt and /sitemap.xml return 200."
+  G-4:
+    severity: MAJOR
+    finding: "PEMF comparison table has no <caption>; stats section has no heading."
+    fix_principle: "<caption>'DR MAGfield vs PEMF: Differentiation Matrix'</caption>
+                    + <h2>Therapy Session Load Profile</h2> on stats."
+  G-5:
+    severity: MAJOR
+    finding: "Raw <img> bypasses next/image. LCP candidate not prioritized.
+              next.config.js does not whitelist lh3.googleusercontent.com."
+    fix_principle: "Whitelist Stitch CDN, swap to <Image priority/> on hero,
+                    rehost critical imgs to /public to drop CDN dependency."
+    falsifiable_test: "Lighthouse LCP ≤ 2.5s on slow-4G simulated."
+  G-6:
+    severity: MAJOR
+    finding: "Image alts too thin for entity extraction."
+    fix_principle: "Entity-rich alts + <figcaption> on product photos."
+  G-7:
+    severity: MAJOR
+    finding: "Open Graph incomplete; no Twitter card. WhatsApp/Messenger
+              previews — Arie's actual distribution channel — render generic."
+    fix_principle: "Full openGraph + twitter blocks; 1200×630 OG image."
+  G-8:
+    severity: MODERATE
+    finding: "Manifest declared, no service worker. theme_color contradicts
+              viewport.themeColor (#1A1A1A vs #F9F7F2)."
+    fix_principle: "next-pwa or hand-rolled app/sw.ts; align to brand cream."
+  G-9:
+    severity: MODERATE
+    finding: "4 font families render-blocking from fonts.googleapis.com,
+              no font-display:swap."
+    fix_principle: "next/font/google self-host + subsetting; drop unused weights."
+  G-10:
+    severity: MODERATE
+    finding: "lang='en' only; brand targets MY+CN demo with 旋磁疗法 keyword."
+    fix_principle: "<html lang='en-MY'> + alternates.languages once /zh exists."
+  G-11:
+    severity: MINOR
+    finding: "No analytics. ADR-7 demands per-partner conversion measurement —
+              impossible without GA4/PostHog and ?utm_* capture."
+    fix_principle: "Lightweight PostHog init + UTM beacon at first paint."
+
+adr7_partnership_hitl_gaps:
+  P-1:
+    severity: BLOCKER
+    surface: "app/page.tsx:9 (BRAND_WHATSAPP), CTA links throughout"
+    finding: "wa.me has no ?text=, tel: is naked. Rabbit Cup tap is
+              indistinguishable from organic. Backend cannot attribute."
+    fix_principle: "?text=Hi%20Arie...%20Source%3A%20{utm_source}; capture UTM
+                    into session beacon for tel:."
+  P-2:
+    severity: BLOCKER
+    finding: "No booking form. PWA cannot emit canonical action-lifecycle event.
+              Idempotent lookupReplay (audit-writer.live.ts) never fires from
+              PWA path."
+    fix_principle: "Add /book form (name, phone, partner-source, slot) → POST
+                    app.longevityvalley.ai/api/.../action-lifecycle → redirect
+                    to wa.me with prefilled context."
+    falsifiable_test: "tool_audit_trail row exists with idempotency_key
+                       'rabbit-cup-2026:+60{phone}' for each test booking."
+  P-3:
+    severity: BLOCKER
+    finding: "No partner-aware landing. Tent QR will land on generic /."
+    fix_principle: "/rabbit-cup (or dynamic /p/[partnership_id]) server
+                    component reading searchParams; partner badge + event-bound
+                    Telegram start param."
+  P-4:
+    severity: BLOCKER
+    finding: "BRAND_WHATSAPP hardcoded. ADR-7 says scale to 1000s of partners —
+              architecture cannot serve N>1 without code change."
+    fix_principle: "Public RO Supabase view v_partner_public_config(whatsapp,
+                    telegram_start_param, banner_color, partner_name) keyed by
+                    partnership_id. Mirrors backend hitl_operator_config."
+    falsifiable_test: "Adding a 2nd partnership row + visiting
+                       /?utm_source=partner_2 swaps phone + colors with zero
+                       code deploy."
+  P-5:
+    severity: MAJOR
+    finding: "Telegram start param hardcoded ?start=krpm — must be
+              ?start={partnership_id}-{event_id} for hitl_operator_config
+              routing."
+    fix_principle: "Compute start param at render from URL/cookie."
+  P-6:
+    severity: MAJOR
+    finding: "No client-side phone normalization. Backend idempotency key
+              needs E.164. User input '012-659 5319' creates duplicate
+              audit rows."
+    fix_principle: "lib/phone.ts with libphonenumber-js; submit only canonical
+                    E.164. Mirrors normalize_phone() in canon/audit-writer."
+  P-7:
+    severity: MAJOR
+    finding: "Bottom-nav 'Qi Mini' tab opens WhatsApp instead of product info."
+    fix_principle: "Either anchor to product showcase, or build /qi-master and
+                    /qi-mini routes (also adds ADR-6 entity-coverage URL surface)."
+  P-8:
+    severity: MAJOR
+    finding: "No event route at T-8 days. Rabbit Cup needs /rabbit-cup with
+              event hero, partner brand, slot picker, capped capacity counter."
+    fix_principle: "app/rabbit-cup/page.tsx — highest immediate ROI."
+  P-9:
+    severity: MODERATE
+    finding: "After WA hand-off the user loses the loop. ADR-7's HITL
+              (Arie taps Telegram button) is invisible to the booking user."
+    fix_principle: "/booking/confirmed?token=… polling /api/booking/status until
+                    HITL confirmation lands; soft confirmation badge."
+  P-10:
+    severity: MODERATE
+    finding: "No service worker → repeat KRPM members lose install benefit
+              (offline shell, push)."
+    fix_principle: "next-pwa + push subscription on second visit."
+  P-11:
+    severity: MINOR
+    finding: "Manifest has no share_target. Members forwarding stories should
+              'Share to DR MAGfield' → opens booking. Under-used virality moat."
+    fix_principle: "Add share_target to manifest.json."
+
+# ─────────────────────────────────────────────────────────────────────────────
+# §3  LAUNCH-CRITICAL SEQUENCING  (T-8 → T-0 = 2026-05-01 → 2026-05-09)
+# ─────────────────────────────────────────────────────────────────────────────
+phasing:
+  phase_1_T-8_to_T-7:
+    label: HARD BLOCKERS for Rabbit Cup
+    tasks:
+      - {id: P-3+P-8, work: "/rabbit-cup route + tent-QR ingest",          eta: "0.5d"}
+      - {id: P-1+P-5, work: "UTM/start-param plumbing (WA + TG + tel:)",   eta: "0.5d"}
+      - {id: P-2+P-6, work: "Booking form → POST → E.164 + idempotency_key", eta: "1.0d"}
+      - {id: G-2,     work: "JSON-LD LocalBusiness+MedicalProcedure+Person", eta: "0.5d"}
+      - {id: G-1,     work: "page.tsx → server component, mobile menu island", eta: "0.5d"}
+    total: "≈3 dev-days"
+  phase_2_T-5_to_T-4:
+    label: ADR-6 GEO floor (structural)
+    tasks:
+      - {id: G-3, work: "robots.ts + sitemap.ts",                          eta: "0.5h"}
+      - {id: G-4, work: "heading + PEMF table caption hierarchy",           eta: "0.5d"}
+      - {id: G-5, work: "next/image + Stitch whitelist + LCP priority",     eta: "0.5d"}
+      - {id: G-7, work: "OG + Twitter card + 1200×630 OG image",            eta: "0.5d"}
+      - {id: G-9, work: "next/font self-host",                              eta: "0.5d"}
+    total: "≈2 dev-days"
+  phase_3_T-3_to_T-2:
+    label: ADR-7 partner-scale primitives (N>1)
+    tasks:
+      - {id: P-4, work: "v_partner_public_config view + dynamic theme",      eta: "1.0d"}
+      - {id: P-9, work: "Booking confirm + HITL status polling",             eta: "0.5d"}
+      - {id: P-7, work: "Qi Master / Qi Mini real product routes",           eta: "1.0d"}
+    total: "≈2.5 dev-days"
+  post_launch:
+    label: V10.x continuation
+    deferred: [G-8, G-10, G-11, P-10, P-11]
+
+# ─────────────────────────────────────────────────────────────────────────────
+# §4  FIRST-PRINCIPLES VERDICT
+# ─────────────────────────────────────────────────────────────────────────────
+verdict: |
+  The PWA closed the GEO COPY ratchet (ADR-6) but fails the GEO STRUCTURAL
+  ratchet — entity cues live inside a 'use client' component without JSON-LD,
+  robots/sitemap, semantic heading hierarchy, or next/image optimization, so
+  the 37→50+ entity-score floor lands on paper while being throttled at the
+  crawler boundary.
+
+  On the ADR-7 axis, the PWA is architecturally severed from the autonomous-
+  Telegram-HITL action-lifecycle pipeline the backend was built for: no
+  booking form to emit a dedupe-able event, no UTM/start-param attribution,
+  no partner-aware theming, no event landing at T-8 days. Both ADRs land
+  their layers but stall at the PWA seam.
+
+four_first_principles_moves:
+  M-1:
+    move: "Split page.tsx into server-rendered indexable shell + small client islands"
+    unblocks: [G-1, G-4, G-6, G-9]
+    risk: "low — Next 14 supports this natively; QR + menu state easily isolatable"
+  M-2:
+    move: "Ship /rabbit-cup + booking POST + E.164 idempotency on the client"
+    unblocks: [P-2, P-3, P-6, P-8]
+    risk: "medium — couples PWA to backend action-lifecycle endpoint contract;
+           confirm endpoint shape with audit-writer.live.ts maintainer"
+  M-3:
+    move: "Bake JSON-LD + robots + sitemap + OG + next/image"
+    unblocks: [G-2, G-3, G-5, G-7]
+    risk: "low — pure additive, no behavior change"
+  M-4:
+    move: "Introduce v_partner_public_config read-only view; PWA reads partner
+           identity by URL parameter, not by hardcoded brand constants"
+    unblocks: [P-1, P-4, P-5, P-7, P-9]
+    risk: "medium — requires Supabase RLS audit (public RO view must not leak
+           internal partnership state); mirrors hitl_operator_config schema"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# §5  OPEN DECISIONS FOR KEITH  (block before code mutation)
+# ─────────────────────────────────────────────────────────────────────────────
+decisions_required:
+  D-1:
+    question: "Is /rabbit-cup a static route or a dynamic /p/[partnership_id]?"
+    options:
+      A: "Static /rabbit-cup hardcoded for 2026-05-09 launch (T-8 viable)"
+      B: "Dynamic /p/[partnership_id] generalized day-1 (T-8 risky; ~+1d)"
+    recommendation: "A for launch, B as Phase-3 refactor (M-4)."
+  D-2:
+    question: "Where does the booking POST land?"
+    options:
+      A: "app.longevityvalley.ai/api/dr-magfield/book (new endpoint)"
+      B: "Existing canon/audit-writer.live.ts entry point with task_type='dr-magfield-booking'"
+    recommendation: "B — reuses idempotent lookupReplay, zero new endpoint surface."
+  D-3:
+    question: "JSON-LD LocalBusiness vs MedicalBusiness vs HealthAndBeautyBusiness?"
+    options:
+      A: "LocalBusiness + MedicalProcedure (cleanest, broadest support)"
+      B: "MedicalBusiness (stronger health entity, riskier Google Health policy)"
+    recommendation: "A — avoid Google YMYL scrutiny on a non-clinical wellness brand."
+  D-4:
+    question: "Service worker scope — full offline shell or push-only?"
+    options:
+      A: "next-pwa full (offline shell + manifest + push) ≈ 1d"
+      B: "Push-only via web-push library ≈ 0.5d, no offline"
+    recommendation: "Defer to post-launch (Phase-4)."
+  D-5:
+    question: "ADR-6 vs ADR-7 number labels — which is GEO and which is Partnerships?"
+    block_until: "PF-1 + PF-2 falsified against the actual ADR text."
+
+# ─────────────────────────────────────────────────────────────────────────────
+# §6  CONTRACT ANCHORS  (for downstream anneal ratchet)
+# ─────────────────────────────────────────────────────────────────────────────
+anneal_contracts_proposed:
+  - name: "pwa-server-shell.contracts.test.ts"
+    asserts:
+      - "app/page.tsx does NOT begin with 'use client'"
+      - "<script type='application/ld+json'> appears in initial HTML"
+      - "Curl with User-Agent: GPTBot returns all 5 entity cues in body"
+  - name: "pwa-partnership-attribution.contracts.test.ts"
+    asserts:
+      - "wa.me URL contains ?text= with utm_source token"
+      - "Telegram URL contains ?start={partnership_id}-{event_id}"
+      - "POST /api/.../book with same (event_id, phone) twice → 1 audit row"
+  - name: "pwa-rabbit-cup-route.contracts.test.ts"
+    asserts:
+      - "GET /rabbit-cup returns 200 with partner banner element"
+      - "QR <img> renders and decodes to t.me/DrMAGfield_Bot?start=rabbit-cup-2026"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# §7  CLI BRAINSTORM PROMPTS  (for the resolution session)
+# ─────────────────────────────────────────────────────────────────────────────
+brainstorm_seeds:
+  - "Read this handoff. Falsify §0 PF-1/PF-2/PF-3 against the actual ADR
+     text. Report the canonical ADR labels back."
+  - "Given §3 phasing, propose a 3-PR cut: PR-1 (launch blockers), PR-2
+     (GEO structural), PR-3 (partner-scale). Each PR ≤ 600 LOC, anneal-green."
+  - "For M-4 (v_partner_public_config), draft the migration SQL + RLS
+     policy + the PWA-side fetch wrapper. Confirm against existing
+     hitl_operator_config schema in expertagentfoundry/migrations/."
+  - "For M-2 (booking POST), trace the existing canon/audit-writer.live.ts
+     entry point and propose the minimal payload shape that lets PWA
+     submissions ride the same idempotent lookupReplay path. Cite line
+     numbers."
+  - "Adversarially attack §4. Where does the four-move plan break under
+     concurrent partner onboarding (N=10 partners arriving same day)?
+     Where does it break under Google's GEO crawler indexing latency
+     (entity score may not lift until next crawl)?"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# END OF HANDOFF
+# ─────────────────────────────────────────────────────────────────────────────
